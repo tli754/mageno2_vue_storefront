@@ -1,0 +1,157 @@
+version: '3'
+services:
+    magento2:
+        image: qweyha520/magento2:release-0.1.6.1
+#        build: .
+        volumes:
+            - ./magento2:/magento2:cached
+            - magento2-assets:/assets
+            - ./tools/config/nginx/conf.d:/etc/nginx/conf.d
+            - ./tools/config/nginx/includes:/etc/nginx/includes
+            - ./tools/xdebug.ini:/etc/php7/conf.d/xdebug.ini
+            - ./tools/config/php/local.ini:/etc/php7/conf.d/local.ini
+        environment:
+            APPLICATION_ENV: development
+        extra_hosts:
+            - "dockerhost:$DOCKERHOST"
+            - "host.docker.internal:$DOCKERHOST"
+        links:
+            - mysql
+        ports:
+            - "8081:8081"
+            - "8082:8082"
+            - "8083:8083"
+    nginx:
+        image: qweyha520/nginx:release-dev-0.1.a
+        volumes:
+            - ./private/.lego:/.lego:cached
+            - ./private/ca:/ca
+            - ./tools/docker/nginx/conf.d:/etc/nginx/conf.d
+#            - ./tools/docker/nginx/start.sh:/start.sh
+        ports:
+            - "80:80"
+            - "443:443"
+        links:
+            - magento2
+    mysql:
+        image: percona
+        container_name: mysql-wd
+        ports:
+            - "33061:3306"
+        environment:
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=Go@w@y2020-root
+            - MYSQL_DATABASE=magento2
+        volumes:
+            - magento-data:/var/lib/mysql
+    storefront-api:
+#        image: qweyha520/storefront-api:latest
+        build: ./vue-storefront-api
+        entrypoint: ["tail", "-f", "/dev/null"]
+        environment:
+            BIND_HOST: 0.0.0.0
+            VS_ENV: development
+        volumes:
+            - './vue-storefront-api/config:/project/config'
+            - './vue-storefront-api/ecosystem.json:/project/ecosystem.json'
+            - './vue-storefront-api/migrations:/project/migrations'
+            - './vue-storefront-api/package.json:/project/package.json'
+            - './vue-storefront-api/babel.config.js:/project/babel.config.js'
+            - './vue-storefront-api/tsconfig.json:/project/tsconfig.json'
+            - './vue-storefront-api/nodemon.json:/project/nodemon.json'
+            - './vue-storefront-api/scripts:/project/scripts'
+            - './vue-storefront-api/src:/project/src'
+            - './vue-storefront-api/var:/project/var'
+            - './vue-storefront-api/node_modules:/project/node_modules'
+        depends_on:
+            - elasticsearch
+            - redis-api
+        ports:
+            - '8080:8080'
+    storefront:
+#        image: qweyha520/storefront:release-0.1.5.4
+        build: ./vue-storefront
+        entrypoint: ["tail", "-f", "/dev/null"]
+        environment:
+            VS_ENV: development
+            BIND_HOST: 0.0.0.0
+        volumes:
+            - './vue-storefront/babel.config.js:/project/babel.config.js'
+            - './vue-storefront/config:/project/config'
+            - './vue-storefront/core:/project/core'
+            - './vue-storefront/ecosystem.json:/project/ecosystem.json'
+            - './vue-storefront/.eslintignore:/project/.eslintignore'
+            - './vue-storefront/.eslintrc.js:/project/.eslintrc.js'
+            - './vue-storefront/lerna.json:/project/lerna.json'
+            - './vue-storefront/tsconfig.json:/project/tsconfig.json'
+            - './vue-storefront/tsconfig-build.json:/project/tsconfig-build.json'
+            - './vue-storefront/shims.d.ts:/project/shims.d.ts'
+            - './vue-storefront/package.json:/project/package.json'
+            - './vue-storefront/yarn.lock:/project/yarn.lock'
+            - './vue-storefront/src:/project/src'
+            - './vue-storefront/var:/project/var'
+            - './vue-storefront/packages:/project/packages'
+        depends_on:
+            - storefront-api
+        ports:
+            - '3000:3000'
+    rabbitmq:
+        image: smebberson/alpine-rabbitmq
+        ports:
+            - "55672:15672"
+            - "5672:5672"
+        volumes:
+            - rabbitmq-log:/data/rabbitmq/log
+            - rabbitmq-data:/data/rabbitmq/mnesia
+        environment:
+            RABBITMQ_ENABLE_MANAGEMENT_PLUGIN: 'true'
+            RABBITMQ_USER: $RABBITMQ_USER
+            RABBITMQ_PASS: $RABBITMQ_PASS
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:5.6.11
+        environment:
+            ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+            cluster.name: "docker-cluster"
+            search.remote.connect: 'false'
+            xpack.security.enabled: 'false'
+            discovery.zen.minimum_master_nodes: 1
+            discovery.type: 'single-node'
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - elasticsearch5-data:/usr/share/elasticsearch/data
+        ports:
+            - '9200:9200'
+            - '9300:9300'
+    kibana:
+        image: docker.elastic.co/kibana/kibana:5.6.11
+        environment:
+            kibana.index: ".kibana6"
+            elasticsearch.url: http://elasticsearch:9200
+        depends_on:
+            - elasticsearch
+        ports:
+            - "5602:5601"
+    redis-session:
+        image: redis:alpine
+        volumes:
+            - "redis-magento2-session-data:/data"
+    redis-cache:
+        image: redis:alpine
+        volumes:
+            - "redis-magento2-cache-data:/data"
+    redis-api:
+        image: redis:alpine
+        ports:
+            - '6379:6379'
+volumes:
+    magento2-assets:
+    rabbitmq-log:
+    rabbitmq-data:
+    redis-magento2-cache-data:
+    redis-magento2-session-data:
+    magento-data:
+    elasticsearch5-data:

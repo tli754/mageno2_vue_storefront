@@ -1,0 +1,168 @@
+#cart-container
+  width: 100%
+  box-sizing: border-box
+  h1
+    margin: 30px 0 10px 0
+    padding: 0 20px
+    font-size: 35px
+  .cart-item-details
+    margin: 0px
+    tr
+      border-top: $item-border
+      td
+        padding: 20px 0
+        &.product-image
+          width: 30%
+          img
+            width: 100%
+            height: auto
+        &.cart-quantity
+          padding-right: 20px
+          padding-left: 20px
+          a
+            display: block
+            color: $color-price
+          button
+            width: 25px
+            height: 25px
+            font-size: 20px
+            line-height: 1
+          >div
+            padding: 10px 0
+          .subtotal
+            font-weight: $font-weight-bolder
+          .quantity
+            display: inline-block
+            min-width: 40px
+            font-size: 18px
+            text-align: center
+            box-sizing: border-box
+          .stock-description
+            white-space: normal
+          .to-wishlist
+            font-size: 13px
+            color: $color-font-notes
+            font-weight: $font-weight-normal
+          .out-stock-item
+            .error-msg
+              padding: 10px
+              margin: 0px
+              &:after
+                display: none
+  tr.removed
+    button
+      line-height: 36px
+    a
+      display: table-header-group
+      float: none
+      font-size: 15px
+    td
+      padding: 10px
+  tfoot
+    background-color: #f9f9f9
+    >tr
+      &:first-child
+        border-top: $item-border
+      >td
+        padding: 20px
+        .totals
+          margin-bottom: 0px
+          font-size: 16px
+          tr
+            display: table-row
+            line-height: 1.6
+            &:last-child
+              >td
+                padding: 10px 0
+  .shipping-estimator
+    .rates
+      clear: both
+      padding-top: 16px
+    .fieldset
+      position: relative
+      width: 211px
+      label
+        font-weight: $font-weight-bold
+  table + div
+    button, .notes
+      display: block
+    button
+      width: 280px
+      height: 70px
+      margin-bottom: 20px
+    .notes
+      float: none
+      clear: both
+      position: absolute
+      right: 0px
+      bottom: 0px
+      svg
+        width: 30px
+        height: 30px
+        top: -2px
+        left: 0px
+  .rates>span
+    display: inline-block
+    width: 100%
+  .vouchers-used
+    ul
+      margin: 0px
+      li
+        margin: 0px
+        >svg
+          width: 15px
+          height: 15px
+          margin-right: 5px
+        >span
+          margin-right: 10px
+          font-size: 15px
+        .remove
+          top: 5px
+          padding: 0px
+          >svg
+            position: static
+            width: 20px
+            height: 20px
+  .continue-shopping
+    height: 50px
+    margin-top: 10px
+    padding-left: 33px
+    font-size: 20px
+    font-weight: $font-weight-bolder
+    &:before, &:after
+      top: 18px
+    >div
+      width: 230px
+      margin: 0 auto
+      position: relative
+  .cart-button
+    position: relative
+    padding: 0 20px 60px 20px
+    box-sizing: border-box
+  .new-price
+    span
+      margin-left: 0
+  .product-recommendations, .cross-sell
+    margin: 0px
+    padding: 0 20px
+
+.afterpay-banner.cart
+  bottom: -15px
+
+@media screen and (max-width: 650px)
+  #cart-container
+    .continue-shopping, .checkout
+      margin-right: 0
+      margin-left: 0
+      float: none
+      width: 100%
+    .cart-button
+      padding-bottom: 0px
+      .notes
+        position: static
+
+@media screen and (max-width: 400px)
+  #cart-container
+    .continue-shopping, .checkout
+      width: 100%
+      height: 100%

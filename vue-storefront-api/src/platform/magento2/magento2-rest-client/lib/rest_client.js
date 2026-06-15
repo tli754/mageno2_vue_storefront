@@ -1,0 +1,147 @@
+'use strict';
+
+var OAuth = require('oauth-1.0a');
+var request = require('request');
+var humps = require('humps');
+var sprintf = require('util').format;
+
+var logger = require('./log');
+
+module.exports.RestClient = function (options) {
+    var instance = {};
+
+    var servelrUrl = options.url;
+    var apiVersion = options.version;
+    var crypto = require('crypto')
+
+    var oauth = OAuth({
+          consumer: {
+            key: options.consumerKey,
+            secret: options.consumerSecret
+        },
+        signature_method: 'HMAC-SHA1',
+        hash_function(base_string, key) {
+          return crypto
+            .createHmac('sha1', key)
+            .update(base_string)
+            .digest('base64')
+        },
+    });
+    var token = {
+        key: options.accessToken,
+        secret: options.accessTokenSecret
+    };
+
+    function apiCall(request_data, request_token = '', customHeaders = {}) {
+        /*
+        *  author with consumer keys always return "The signature is invalid. Verify and try again." from magento 2
+        *  so use Bearer token which is not the best solution. need improve in the future.
+        * */
+        // const header = oauth.toHeader(oauth.authorize(request_data, token))
+        const header = { 'Authorization': 'Bearer ' + token.key };
+
+        /* eslint no-undef: off*/
+        return new Promise(function (resolve, reject) {
+            request({
+                url: request_data.url,
+                method: request_data.method,
+                headers: { ...header, ...customHeaders },
+                json: true,
+                body: request_data.body,
+            }, function (error, response, body) {
+                if (error) {
+                    logger.error('Error occured: ' + error);
+                    reject(error);
+                    return;
+                } else if (!httpCallSucceeded(response)) {
+                    var errorMessage = 'HTTP ERROR ' + response.code;
+                    if(body && body.hasOwnProperty('message') )
+                        errorMessage = errorString(body.message, body.hasOwnProperty('parameters') ? body.parameters : {});
+
+                    logger.error('API call failed: ' + errorMessage);
+                    reject({
+                        errorMessage,
+                        code: response.statusCode,
+                        toString: () => {
+                            return this.errorMessage
+                        }
+                    });
+                }
+//                var bodyCamelized = humps.camelizeKeys(body);
+//                resolve(bodyCamelized);
+                resolve(body);
+            });
+        });
+    }
+
+    instance.consumerToken = function (login_data) {
+        return apiCall({
+            url: createUrl('/integration/customer/token'),
+            method: 'POST',
+            body: login_data
+        })
+    }
+
+    function httpCallSucceeded(response) {
+        return response.statusCode >= 200 && response.statusCode < 300;
+    }
+
+    function errorString(message, parameters) {
+        if (parameters === null) {
+            return message;
+        }
+        if (parameters instanceof Array) {
+            for (var i = 0; i < parameters.length; i++) {
+                var parameterPlaceholder = '%' + (i + 1).toString();
+                message = message.replace(parameterPlaceholder, parameters[i]);
+            }
+        } else if (parameters instanceof Object) {
+            for (var key in parameters) {
+                var parameterPlaceholder = '%' + key;
+                message = message.replace(parameterPlaceholder, parameters[key]);
+            }
+        }
+
+        return message;
+    }
+
+    instance.get = function (resourceUrl, request_token = '') {
+        var request_data = {
+            url: createUrl(resourceUrl),
+            method: 'GET'
+        };
+        return apiCall(request_data, request_token);
+    }
+
+    function createUrl(resourceUrl) {
+        return servelrUrl + '/' + apiVersion + resourceUrl;
+    }
+
+    instance.post = function (resourceUrl, data, request_token = '') {
+        var request_data = {
+            url: createUrl(resourceUrl),
+            method: 'POST',
+            body: data
+        };
+        return apiCall(request_data, request_token);
+    }
+
+    instance.put = function (resourceUrl, data, request_token = '') {
+        var request_data = {
+            url: createUrl(resourceUrl),
+            method: 'PUT',
+            body: data
+        };
+        return apiCall(request_data, request_token);
+    }
+
+    instance.delete = function (resourceUrl, request_token = '') {
+        var request_data = {
+            url: createUrl(resourceUrl),
+            method: 'DELETE'
+        };
+        return apiCall(request_data, request_token);
+    }
+
+    return instance;
+}

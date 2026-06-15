@@ -1,0 +1,13 @@
+{
+  "name": "whiteDonkey/checkout",
+  "description": "magento custom checkout",
+  "type": "magento2-module",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "WhiteDonkey\\Checkout\\": ""
+    }
+  }
+}

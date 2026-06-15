@@ -1,0 +1,96 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="checkout.root">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="checkout" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="sidebar" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="summary" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="summary-discount" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_SalesRule/js/view/payment/discount</item>
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="errors" xsi:type="array">
+                                                            <item name="sortOrder" xsi:type="string">0</item>
+                                                            <item name="component" xsi:type="string">Magento_SalesRule/js/view/payment/discount-messages</item>
+                                                            <item name="displayArea" xsi:type="string">messages</item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                                <item name="steps" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="detail-step" xsi:type="array">
+                                            <item name="component" xsi:type="string">WhiteDonkey_Checkout/js/view/detail-step-view</item>
+                                            <item name="sortOrder" xsi:type="string">2</item>
+                                            <item name="children" xsi:type="array">
+                                                <!--add here child component declaration for your step-->
+                                            </item>
+                                        </item>
+                                        <item name="shipping-step" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <!-- Declare the component that registers the shipping address and rates processors -->
+                                                <item name="custom-address-provider" xsi:type="array">
+                                                    <item name="component" xsi:type="string">WhiteDonkey_Checkout/js/view/shipping/shipping-address-processor</item>
+                                                </item>
+                                                <item name="shippingAddress" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="rendererTemplates" xsi:type="array">
+                                                            <item name="customShippingProcessor" xsi:type="array">
+                                                                <item name="component" xsi:type="string">WhiteDonkey_Checkout/js/view/shipping/shipping-address-renderer</item>
+                                                            </item>
+                                                        </item>
+                                                        <item name="before-form" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="custom-checkout-form-container" xsi:type="array">
+                                                                    <!-- Add this item to configure your js file  -->
+                                                                    <item name="component" xsi:type="string">WhiteDonkey_Checkout/js/view/custom-checkout-form</item>
+                                                                    <item name="config" xsi:type="array">
+                                                                        <!-- And this to add your html template  -->
+                                                                        <item name="template" xsi:type="string">WhiteDonkey_Checkout/custom-checkout-form</item>
+                                                                    </item>
+                                                                    <item name="children" xsi:type="array">
+                                                                        <!-- Here we will add the form fields  -->
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                        <!-- The name of the form the field belongs to -->
+<!--                                                        <item name="shipping-address-fieldset" xsi:type="array">-->
+<!--                                                            <item name="children" xsi:type="array">-->
+<!--                                                                &lt;!&ndash; the field you are customizing &ndash;&gt;-->
+<!--                                                                <item name="telephone" xsi:type="array">-->
+<!--                                                                    <item name="config" xsi:type="array">-->
+<!--                                                                        &lt;!&ndash; Assigning a new template &ndash;&gt;-->
+<!--                                                                        <item name="elementTmpl" xsi:type="string">WhiteDonkey_Checkout/form/element/test_template</item>-->
+<!--                                                                    </item>-->
+<!--                                                                </item>-->
+<!--                                                            </item>-->
+<!--                                                        </item>-->
+                                                        <item name="before-shipping-method-form" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="shipping_policy" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">WhiteDonkey_Checkout/js/view/shipping/shipping-policy</item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

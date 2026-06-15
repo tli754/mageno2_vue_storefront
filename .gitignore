@@ -1,0 +1,12 @@
+.DS_Store
+.env
+/.idea
+/.idea/
+/private/
+node_modules/
+vendor/
+
+# Credentials and local config — never commit these
+magento2/gs-storage-staging.json
+magento2/gs-storage-production.json
+vue-storefront-api/config/local.json

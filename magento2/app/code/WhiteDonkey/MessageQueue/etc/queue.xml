@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker topic="magento.elastic.index" type="amqp" exchange="magento.index.exchange">
+        <queue consumer="magento.index.consumer" name="magento.index.event"
+               handler="WhiteDonkey\MessageQueue\Model\Subscriber::processMessage"
+               consumerInstance="Magento\Framework\MessageQueue\Consumer"/>
+    </broker>
+    <broker topic="magento.errors" type="amqp" exchange="magento.errors.exchange">
+        <queue consumer="magento.errors.consumer" name="magento.error.messages"
+               handler="WhiteDonkey\MessageQueue\Model\Subscriber::processMessage"
+               consumerInstance="Magento\Framework\MessageQueue\Consumer"/>
+    </broker>
+</config>

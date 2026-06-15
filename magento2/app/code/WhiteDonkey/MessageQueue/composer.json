@@ -1,0 +1,13 @@
+{
+  "name": "WhiteDonkey/messagequeue",
+  "description": "Message queue example",
+  "type": "magento2-module",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "WhiteDonkey\\MessageQueue\\": ""
+    }
+  }
+}

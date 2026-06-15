@@ -1,0 +1,13 @@
+{
+  "name": "whiteDonkey/indexer",
+  "description": "magento custom index",
+  "type": "magento2-module",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "WhiteDonkey\\Indexer\\": ""
+    }
+  }
+}

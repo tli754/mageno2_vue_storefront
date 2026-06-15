@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="WhiteDonkey\MessageQueue\Api\MessageInterface" type="WhiteDonkey\MessageQueue\Model\Message" />
+    <preference for="WhiteDonkey\MessageQueue\Api\SubscriberInterface" type="WhiteDonkey\MessageQueue\Model\Subscriber" />
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="publish-message" xsi:type="object">
+                    WhiteDonkey\MessageQueue\Console\MessagePublishCommand
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

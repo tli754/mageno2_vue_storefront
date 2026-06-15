@@ -1,0 +1,13 @@
+{
+  "name": "whiteDonkey/elastic",
+  "description": "magento elastic search client",
+  "type": "magento2-module",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "WhiteDonkey\\Elastic\\": ""
+    }
+  }
+}

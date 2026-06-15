@@ -1,0 +1,13 @@
+{
+  "name": "whiteDonkey/messaging",
+  "description": "RabbitMQ Message queue",
+  "type": "magento2-module",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "WhiteDonkey\\Messaging\\": ""
+    }
+  }
+}
