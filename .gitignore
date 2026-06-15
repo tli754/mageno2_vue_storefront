@@ -9,4 +9,5 @@ vendor/
 # Credentials and local config — never commit these
 magento2/gs-storage-staging.json
 magento2/gs-storage-production.json
+magento2/auth.json
 vue-storefront-api/config/local.json

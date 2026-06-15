@@ -41,7 +41,7 @@ services:
         environment:
             - MYSQL_USER=${MYSQL_USER}
             - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-            - MYSQL_ROOT_PASSWORD=Go@w@y2020-root
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
             - MYSQL_DATABASE=magento2
         volumes:
             - magento-data:/var/lib/mysql
