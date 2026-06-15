@@ -1,5 +1,5 @@
-FROM node:15-alpine
-MAINTAINER Tao Li <tao.li@gmail.co.nz>
+FROM node:18-alpine
+LABEL maintainer="Tao Li <tao.li@gmail.co.nz>"
 
 RUN mkdir /project
 WORKDIR /project
@@ -11,7 +11,7 @@ RUN cd /project \
   && apk add --no-cache --virtual .build-deps \
   && apk add --no-cache ca-certificates \
   && apk add --no-cache wget \
-  && apk add --no-cache python \
+  && apk add --no-cache python3 \
   && apk add --no-cache make \
   && apk add --no-cache g++ \
   && apk add --no-cache git \

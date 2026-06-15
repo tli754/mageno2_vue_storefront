@@ -5,7 +5,6 @@ import config from 'config';
 sharp.cache(config.imageable.cache);
 sharp.concurrency(config.imageable.concurrency);
 sharp.counters(config.imageable.counters);
-sharp.simd(config.imageable.simd);
 
 export async function downloadImage (url) {
   const response = await rp.get(url, { encoding: null });
