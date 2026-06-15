@@ -97,17 +97,15 @@ services:
         ports:
             - '3000:3000'
     rabbitmq:
-        image: smebberson/alpine-rabbitmq
+        image: rabbitmq:3-management
         ports:
             - "55672:15672"
             - "5672:5672"
         volumes:
-            - rabbitmq-log:/data/rabbitmq/log
-            - rabbitmq-data:/data/rabbitmq/mnesia
+            - rabbitmq-data:/var/lib/rabbitmq
         environment:
-            RABBITMQ_ENABLE_MANAGEMENT_PLUGIN: 'true'
-            RABBITMQ_USER: $RABBITMQ_USER
-            RABBITMQ_PASS: $RABBITMQ_PASS
+            RABBITMQ_DEFAULT_USER: $RABBITMQ_USER
+            RABBITMQ_DEFAULT_PASS: $RABBITMQ_PASS
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:5.6.11
         environment:
@@ -149,7 +147,6 @@ services:
             - '6379:6379'
 volumes:
     magento2-assets:
-    rabbitmq-log:
     rabbitmq-data:
     redis-magento2-cache-data:
     redis-magento2-session-data:

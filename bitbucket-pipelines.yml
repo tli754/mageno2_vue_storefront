@@ -16,33 +16,32 @@ pipelines:
             - docker push qweyha520/magento2:latest
           after-script:
             - echo "magento2 image has pushed to repository."
-#      - step:
-#          name: storefront-api
-#          caches:
-#            - docker
-#          services:
-#            - docker
-#          script:
-#            - echo "build vue storefront api image ..."
-#            - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-#            - docker pull qweyha520/storefront-api:latest || true #To use for cache
-#            - docker build --build-arg BUILD_NUMBER=$BITBUCKET_TAG --cache-from qweyha520/storefront-api:latest -t qweyha520/storefront-api:$BITBUCKET_TAG -t qweyha520/storefront-api:latest ./vue-storefront-api
-#            - docker push qweyha520/storefront-api:$BITBUCKET_TAG
-#            - docker push qweyha520/storefront-api:latest
-#          after-script:
-#            - echo "storefront-api image has pushed to repository."
-#      - step:
-#          name: storefront
-#          caches:
-#            - docker
-#          services:
-#            - docker
-#  #          trigger: manual
-#          script:
-#            - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-#            - docker pull qweyha520/storefront:latest || true #To use for cache
-#            - docker build --build-arg BUILD_NUMBER=$BITBUCKET_TAG --cache-from qweyha520/storefront:latest -t qweyha520/storefront:$BITBUCKET_TAG -t qweyha520/storefront:latest ./vue-storefront
-#            - docker push qweyha520/storefront:$BITBUCKET_TAG
-#            - docker push qweyha520/storefront:latest
-#          after-script:
-#            - echo "storefront image has pushed to repository."
+      - step:
+          name: storefront-api
+          caches:
+            - docker
+          services:
+            - docker
+          script:
+            - echo "build vue storefront api image ..."
+            - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+            - docker pull qweyha520/storefront-api:latest || true #To use for cache
+            - docker build --build-arg BUILD_NUMBER=$BITBUCKET_TAG --cache-from qweyha520/storefront-api:latest -t qweyha520/storefront-api:$BITBUCKET_TAG -t qweyha520/storefront-api:latest ./vue-storefront-api
+            - docker push qweyha520/storefront-api:$BITBUCKET_TAG
+            - docker push qweyha520/storefront-api:latest
+          after-script:
+            - echo "storefront-api image has pushed to repository."
+      - step:
+          name: storefront
+          caches:
+            - docker
+          services:
+            - docker
+          script:
+            - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+            - docker pull qweyha520/storefront:latest || true #To use for cache
+            - docker build --build-arg BUILD_NUMBER=$BITBUCKET_TAG --cache-from qweyha520/storefront:latest -t qweyha520/storefront:$BITBUCKET_TAG -t qweyha520/storefront:latest ./vue-storefront
+            - docker push qweyha520/storefront:$BITBUCKET_TAG
+            - docker push qweyha520/storefront:latest
+          after-script:
+            - echo "storefront image has pushed to repository."
